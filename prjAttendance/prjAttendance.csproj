@@ -45,10 +45,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -137,6 +145,53 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005180418114_fkk.cs" />
+    <Compile Include="Migrations\202005180418114_fkk.Designer.cs">
+      <DependentUpon>202005180418114_fkk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005180542420_editRecord.cs" />
+    <Compile Include="Migrations\202005180542420_editRecord.Designer.cs">
+      <DependentUpon>202005180542420_editRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005180557240_editTimetable.cs" />
+    <Compile Include="Migrations\202005180557240_editTimetable.Designer.cs">
+      <DependentUpon>202005180557240_editTimetable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005180600505_editTimetable2.cs" />
+    <Compile Include="Migrations\202005180600505_editTimetable2.Designer.cs">
+      <DependentUpon>202005180600505_editTimetable2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005180619323_editFKId.cs" />
+    <Compile Include="Migrations\202005180619323_editFKId.Designer.cs">
+      <DependentUpon>202005180619323_editFKId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005180635168_editStudentFK.cs" />
+    <Compile Include="Migrations\202005180635168_editStudentFK.Designer.cs">
+      <DependentUpon>202005180635168_editStudentFK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005180703340_editTimetableClassFK.cs" />
+    <Compile Include="Migrations\202005180703340_editTimetableClassFK.Designer.cs">
+      <DependentUpon>202005180703340_editTimetableClassFK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005180713434_editRecord1.cs" />
+    <Compile Include="Migrations\202005180713434_editRecord1.Designer.cs">
+      <DependentUpon>202005180713434_editRecord1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005180731427_editTimetableFK.cs" />
+    <Compile Include="Migrations\202005180731427_editTimetableFK.Designer.cs">
+      <DependentUpon>202005180731427_editTimetableFK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005180736580_editName.cs" />
+    <Compile Include="Migrations\202005180736580_editName.Designer.cs">
+      <DependentUpon>202005180736580_editName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Class.cs" />
+    <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\Record.cs" />
+    <Compile Include="Models\Student.cs" />
+    <Compile Include="Models\Teacher.cs" />
+    <Compile Include="Models\Timetable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -178,7 +233,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -192,6 +246,38 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202005180418114_fkk.resx">
+      <DependentUpon>202005180418114_fkk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005180542420_editRecord.resx">
+      <DependentUpon>202005180542420_editRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005180557240_editTimetable.resx">
+      <DependentUpon>202005180557240_editTimetable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005180600505_editTimetable2.resx">
+      <DependentUpon>202005180600505_editTimetable2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005180619323_editFKId.resx">
+      <DependentUpon>202005180619323_editFKId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005180635168_editStudentFK.resx">
+      <DependentUpon>202005180635168_editStudentFK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005180703340_editTimetableClassFK.resx">
+      <DependentUpon>202005180703340_editTimetableClassFK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005180713434_editRecord1.resx">
+      <DependentUpon>202005180713434_editRecord1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005180731427_editTimetableFK.resx">
+      <DependentUpon>202005180731427_editTimetableFK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005180736580_editName.resx">
+      <DependentUpon>202005180736580_editName.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
