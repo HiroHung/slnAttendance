@@ -16,10 +16,9 @@ namespace prjAttendance.Models
         public string IDcardNumber { set; get; }
         public string Email { set; get; }
         public DateTime BirthDate { set; get; }
-        public int TutorPermission { set; get; }
-        public int AdministrationPermission { set; get; }
+        public string Permission { set; get; }
 
-       
+
         public virtual ICollection<Timetable> Timetables { set; get; }
     }
 }

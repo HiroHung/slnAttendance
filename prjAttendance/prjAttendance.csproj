@@ -51,6 +51,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="jose-jwt, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jose-jwt.2.5.0\lib\net461\jose-jwt.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -142,6 +145,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IndexApiController.cs" />
+    <Compile Include="Controllers\TeachersApiController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -185,14 +190,27 @@
     <Compile Include="Migrations\202005180736580_editName.Designer.cs">
       <DependentUpon>202005180736580_editName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005200154394_insertPermissioneditTeacher.cs" />
+    <Compile Include="Migrations\202005200154394_insertPermissioneditTeacher.Designer.cs">
+      <DependentUpon>202005200154394_insertPermissioneditTeacher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005200237143_RecordInsertWeek.cs" />
+    <Compile Include="Migrations\202005200237143_RecordInsertWeek.Designer.cs">
+      <DependentUpon>202005200237143_RecordInsertWeek.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Class.cs" />
     <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\Timetable.cs" />
+    <Compile Include="Models\Utility.cs" />
+    <Compile Include="Models\ViewLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\JwtAuthFilter.cs" />
+    <Compile Include="Security\JwtAuthUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -277,6 +295,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202005180736580_editName.resx">
       <DependentUpon>202005180736580_editName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005200154394_insertPermissioneditTeacher.resx">
+      <DependentUpon>202005200154394_insertPermissioneditTeacher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005200237143_RecordInsertWeek.resx">
+      <DependentUpon>202005200237143_RecordInsertWeek.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
