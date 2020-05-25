@@ -30,7 +30,7 @@ namespace prjAttendance.Models
         public DateTime BirthDate { set; get; }
         public string Address { set; get; }
         public string IDcardNumber { set; get; }
-
         public string Gender { set; get; }
+        public string Permission { set; get; }
     }
 }

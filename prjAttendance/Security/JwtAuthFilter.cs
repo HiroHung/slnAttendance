@@ -15,7 +15,7 @@ namespace prjAttendance.Security
     {
         public override void OnActionExecuting(System.Web.Http.Controllers.HttpActionContext actionContext)
         {
-            string secret = "myJwtAuthDemo";//加解密的key,如果不一樣會無法成功解密
+            string secret = "ILoveRocketCoding";//加解密的key,如果不一樣會無法成功解密
             var request = actionContext.Request;
             if (!WithoutVerifyToken(request.RequestUri.ToString()))
             {
@@ -29,14 +29,12 @@ namespace prjAttendance.Security
                         request.Headers.Authorization.Parameter,
                         Encoding.UTF8.GetBytes(secret),
                         JwsAlgorithm.HS512);
-                    
                     if (IsTokenExpired(jwtObject["Exp"].ToString()))
                     {
                         setErrorResponse(actionContext, "Token Expired");
                     }
                 }
             }
-
             base.OnActionExecuting(actionContext);
         }
 

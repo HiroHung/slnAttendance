@@ -147,6 +147,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IndexApiController.cs" />
     <Compile Include="Controllers\TeachersApiController.cs" />
+    <Compile Include="Controllers\TimetablesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -198,8 +199,21 @@
     <Compile Include="Migrations\202005200237143_RecordInsertWeek.Designer.cs">
       <DependentUpon>202005200237143_RecordInsertWeek.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005210247166_insertStudentPermission.cs" />
+    <Compile Include="Migrations\202005210247166_insertStudentPermission.Designer.cs">
+      <DependentUpon>202005210247166_insertStudentPermission.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005210319351_insertContactRecord.cs" />
+    <Compile Include="Migrations\202005210319351_insertContactRecord.Designer.cs">
+      <DependentUpon>202005210319351_insertContactRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005210332522_editClassName.cs" />
+    <Compile Include="Migrations\202005210332522_editClassName.Designer.cs">
+      <DependentUpon>202005210332522_editClassName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Class.cs" />
+    <Compile Include="Models\Contactrecord.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\Record.cs" />
@@ -301,6 +315,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202005200237143_RecordInsertWeek.resx">
       <DependentUpon>202005200237143_RecordInsertWeek.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005210247166_insertStudentPermission.resx">
+      <DependentUpon>202005210247166_insertStudentPermission.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005210319351_insertContactRecord.resx">
+      <DependentUpon>202005210319351_insertContactRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005210332522_editClassName.resx">
+      <DependentUpon>202005210332522_editClassName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

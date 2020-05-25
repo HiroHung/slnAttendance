@@ -28,6 +28,7 @@
         public virtual DbSet<Timetable> Timetables { get; set; }
         public virtual DbSet<Record> Records { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
+        public virtual DbSet<Contactrecord> Contactrecords { get; set; }
     }
 
     //public class MyEntity

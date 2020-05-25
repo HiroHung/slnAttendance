@@ -20,5 +20,6 @@ namespace prjAttendance.Models
         public string Permission { set; get; }
 
         public string Token { set; get; }
+        public int Week { set; get; }
     }
 }

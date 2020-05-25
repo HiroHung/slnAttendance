@@ -20,5 +20,6 @@ namespace prjAttendance.Models
 
 
         public virtual ICollection<Timetable> Timetables { set; get; }
+        public virtual ICollection<Contactrecord> Contactrecords { set; get; }
     }
 }

@@ -18,20 +18,9 @@ namespace prjAttendance.Controllers
         private Model db = new Model();
 
         // GET: api/TeachersApi
-        public IHttpActionResult GetTeachers(ViewLogin viewLogin)
+        public IHttpActionResult GetTeachers()
         {
-            //var result = db.Teachers.Select(x => new
-            //{
-            //    x.Id,
-            //    x.Email,
-            //    x.IDcardNumber,
-            //    x.Timetables,
-            //    x.BirthDate,
-            //    x.Permission
-            //});
-            JwtAuthUtil jeAuthUtil =new JwtAuthUtil();
-            var result = jeAuthUtil.Tid(viewLogin.Token);
-            return Ok(result);
+            return Ok();
         }
 
         // GET: api/TeachersApi/5
@@ -124,7 +113,7 @@ namespace prjAttendance.Controllers
         {
             return db.Teachers.Count(e => e.Id == id) > 0;
         }
-        // POST: api/Login
+        [HttpPost]
         [Route("api/Login")]
         public HttpResponseMessage Post(ViewLogin viewLogin)
         {
@@ -136,7 +125,7 @@ namespace prjAttendance.Controllers
                     if (student != null)
                     {
                         JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
-                        string jwtToken = jwtAuthUtil.GenerateToken(student.Id, student.Name, student.StudentId);
+                        string jwtToken = jwtAuthUtil.GenerateToken(student.Id,student.Permission);
                         return Request.CreateResponse(HttpStatusCode.OK, new
                         {
                             status = true,
@@ -154,7 +143,7 @@ namespace prjAttendance.Controllers
                 if (teacher != null)
                 {
                     JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
-                    string jwtToken = jwtAuthUtil.GenerateToken(teacher.Id, teacher.Name, teacher.Email);
+                    string jwtToken = jwtAuthUtil.GenerateToken(teacher.Id,teacher.Permission);
                     return Request.CreateResponse(HttpStatusCode.OK, new
                     {
                         status = true,

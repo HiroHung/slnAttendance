@@ -13,8 +13,7 @@ namespace prjAttendance.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { set; get; }
         public int TeacherId { set; get; }
-
-        public int ClassName { set; get; }
+        public string ClassName { set; get; }
 
         public virtual ICollection<Student> Students { set; get; }
         public virtual ICollection<Timetable> Timetables { set; get; }

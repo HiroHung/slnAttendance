@@ -17,10 +17,10 @@ namespace prjAttendance.Controllers
         private Model db = new Model();
 
         // GET: api/IndexApi
-        [Route("api/Index")]
-        public IQueryable<Permission> GetPermission()
+        public IHttpActionResult GetPermission( )
         {
-            return db.Permission;
+            var result = db.Permission.ToList();
+            return Ok(result);
         }
 
         // GET: api/IndexApi/5
