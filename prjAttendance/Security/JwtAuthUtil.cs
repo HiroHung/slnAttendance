@@ -25,14 +25,24 @@ namespace prjAttendance.Security
             return token;
         }
 
-        public string GetId(string Token)
+        public static int GetId(string Token)
         {
             string secret = "ILoveRocketCoding";//加解密的key,如果不一樣會無法成功解密
             var jwtObject = Jose.JWT.Decode<Dictionary<string, Object>>(
                 Token,
                 Encoding.UTF8.GetBytes(secret),
                 JwsAlgorithm.HS512);
-            return jwtObject["Id"].ToString();
+            return Convert.ToInt32(jwtObject["Id"]);
+        }
+
+        public string GetPermission(string Token)
+        {
+            string secret = "ILoveRocketCoding";//加解密的key,如果不一樣會無法成功解密
+            var jwtObject = Jose.JWT.Decode<Dictionary<string, Object>>(
+                Token,
+                Encoding.UTF8.GetBytes(secret),
+                JwsAlgorithm.HS512);
+            return jwtObject["Permission"].ToString();
         }
     }
 }

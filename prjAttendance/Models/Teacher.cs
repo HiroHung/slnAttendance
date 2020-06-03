@@ -17,8 +17,6 @@ namespace prjAttendance.Models
         public string Email { set; get; }
         public DateTime BirthDate { set; get; }
         public string Permission { set; get; }
-
-
         public virtual ICollection<Timetable> Timetables { set; get; }
         public virtual ICollection<Contactrecord> Contactrecords { set; get; }
     }

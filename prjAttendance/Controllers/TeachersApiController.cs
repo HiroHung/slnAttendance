@@ -113,8 +113,9 @@ namespace prjAttendance.Controllers
         {
             return db.Teachers.Count(e => e.Id == id) > 0;
         }
+
         [HttpPost]
-        [Route("api/Login")]
+        [Route("api/login")]
         public HttpResponseMessage Post(ViewLogin viewLogin)
         {
             if (ModelState.IsValid)
@@ -125,41 +126,42 @@ namespace prjAttendance.Controllers
                     if (student != null)
                     {
                         JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
-                        string jwtToken = jwtAuthUtil.GenerateToken(student.Id,student.Permission);
+                        string jwtToken = jwtAuthUtil.GenerateToken(student.Id, student.Permission);
                         return Request.CreateResponse(HttpStatusCode.OK, new
                         {
-                            status = true,
+                            code = 1,
                             token = jwtToken,
                             message = "登入成功"
                         });
                     }
-                    return Request.CreateResponse(HttpStatusCode.NotFound, new
+                    return Request.CreateResponse(HttpStatusCode.OK, new
                     {
-                        status = false,
-                        message = "登入失敗"
+                        code = 5567,
+                        message = "帳密錯誤或身分不符"
                     });
                 }
                 Teacher teacher = ValidateTeacherUser(viewLogin.Account, viewLogin.Password, viewLogin.Permission);
                 if (teacher != null)
                 {
                     JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
-                    string jwtToken = jwtAuthUtil.GenerateToken(teacher.Id,teacher.Permission);
+                    string jwtToken = jwtAuthUtil.GenerateToken(teacher.Id, teacher.Permission.ToString());
                     return Request.CreateResponse(HttpStatusCode.OK, new
                     {
-                        status = true,
+                        code = 1,
                         token = jwtToken,
                         message = "登入成功"
                     });
                 }
-                return Request.CreateResponse(HttpStatusCode.NotFound, new
+                return Request.CreateResponse(HttpStatusCode.OK, new
                 {
-                    status = false,
-                    message = "登入失敗"
+                    code = 5567,
+                    message = "帳密錯誤或身分不符"
                 });
+
             }
-            return Request.CreateResponse(HttpStatusCode.NotFound, new
+            return Request.CreateResponse(HttpStatusCode.OK, new
             {
-                status = false,
+                code = 5567,
                 message = "登入失敗"
             });
         }
@@ -180,7 +182,7 @@ namespace prjAttendance.Controllers
 
         private Student ValidateStudentUser(string account, string password)
         {
-            Student student = db.Students.SingleOrDefault(o => o.StudentId == account);
+            Student student = db.Students.SingleOrDefault(o => o.StudentNumber == account);
             if (student == null)
             {
                 return null;

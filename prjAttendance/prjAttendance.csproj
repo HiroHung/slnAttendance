@@ -145,7 +145,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\IndexApiController.cs" />
+    <Compile Include="Controllers\MentorRecordsController.cs" />
+    <Compile Include="Controllers\MentorStudentsController.cs" />
+    <Compile Include="Controllers\PermissionsController.cs" />
+    <Compile Include="Controllers\TeachRecordsController.cs" />
     <Compile Include="Controllers\TeachersApiController.cs" />
     <Compile Include="Controllers\TimetablesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -211,9 +214,54 @@
     <Compile Include="Migrations\202005210332522_editClassName.Designer.cs">
       <DependentUpon>202005210332522_editClassName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005250440215_insertEnum.cs" />
+    <Compile Include="Migrations\202005250440215_insertEnum.Designer.cs">
+      <DependentUpon>202005250440215_insertEnum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005250453414_0525.cs" />
+    <Compile Include="Migrations\202005250453414_0525.Designer.cs">
+      <DependentUpon>202005250453414_0525.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005250517385_0525-2.cs" />
+    <Compile Include="Migrations\202005250517385_0525-2.Designer.cs">
+      <DependentUpon>202005250517385_0525-2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005250718434_insertICollectionRecord.cs" />
+    <Compile Include="Migrations\202005250718434_insertICollectionRecord.Designer.cs">
+      <DependentUpon>202005250718434_insertICollectionRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005260748041_editStudentIdtoStudentNumber.cs" />
+    <Compile Include="Migrations\202005260748041_editStudentIdtoStudentNumber.Designer.cs">
+      <DependentUpon>202005260748041_editStudentIdtoStudentNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005260827232_editContactResult.cs" />
+    <Compile Include="Migrations\202005260827232_editContactResult.Designer.cs">
+      <DependentUpon>202005260827232_editContactResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005261712477_ContactrecordInsetMethod.cs" />
+    <Compile Include="Migrations\202005261712477_ContactrecordInsetMethod.Designer.cs">
+      <DependentUpon>202005261712477_ContactrecordInsetMethod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005270840318_editLessonOrder.cs" />
+    <Compile Include="Migrations\202005270840318_editLessonOrder.Designer.cs">
+      <DependentUpon>202005270840318_editLessonOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005270900075_editLessonOrderType.cs" />
+    <Compile Include="Migrations\202005270900075_editLessonOrderType.Designer.cs">
+      <DependentUpon>202005270900075_editLessonOrderType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006020608153_editEnumlist.cs" />
+    <Compile Include="Migrations\202006020608153_editEnumlist.Designer.cs">
+      <DependentUpon>202006020608153_editEnumlist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006020817304_RecordClassName.cs" />
+    <Compile Include="Migrations\202006020817304_RecordClassName.Designer.cs">
+      <DependentUpon>202006020817304_RecordClassName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Class.cs" />
     <Compile Include="Models\Contactrecord.cs" />
+    <Compile Include="Models\EnumList.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\Record.cs" />
@@ -222,6 +270,7 @@
     <Compile Include="Models\Timetable.cs" />
     <Compile Include="Models\Utility.cs" />
     <Compile Include="Models\ViewLogin.cs" />
+    <Compile Include="Models\ViewRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\JwtAuthFilter.cs" />
     <Compile Include="Security\JwtAuthUtil.cs" />
@@ -324,6 +373,39 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202005210332522_editClassName.resx">
       <DependentUpon>202005210332522_editClassName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005250440215_insertEnum.resx">
+      <DependentUpon>202005250440215_insertEnum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005250453414_0525.resx">
+      <DependentUpon>202005250453414_0525.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005250517385_0525-2.resx">
+      <DependentUpon>202005250517385_0525-2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005250718434_insertICollectionRecord.resx">
+      <DependentUpon>202005250718434_insertICollectionRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005260748041_editStudentIdtoStudentNumber.resx">
+      <DependentUpon>202005260748041_editStudentIdtoStudentNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005260827232_editContactResult.resx">
+      <DependentUpon>202005260827232_editContactResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005261712477_ContactrecordInsetMethod.resx">
+      <DependentUpon>202005261712477_ContactrecordInsetMethod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005270840318_editLessonOrder.resx">
+      <DependentUpon>202005270840318_editLessonOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005270900075_editLessonOrderType.resx">
+      <DependentUpon>202005270900075_editLessonOrderType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006020608153_editEnumlist.resx">
+      <DependentUpon>202006020608153_editEnumlist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006020817304_RecordClassName.resx">
+      <DependentUpon>202006020817304_RecordClassName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -78,5 +78,33 @@ namespace prjAttendance.Models
 
         }
         #endregion
+
+        #region "取得星期"
+
+        public static int GetWeek()
+        {
+            string week;   
+            week=DateTime.Today.DayOfWeek.ToString();
+            switch (week)
+            {
+                case "Monday":
+                    return 1;
+                case "Tuesday":
+                    return 2;
+                case "Wednesday":
+                    return 3;
+                case "Thursday":
+                    return 4;
+                case "Friday":
+                    return 5;
+                default:
+                    return 0;
+            }
+        }
+
+        #endregion
+        
     }
+
+    
 }

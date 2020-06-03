@@ -23,5 +23,13 @@ namespace prjAttendance
             // 註冊JwtAuthFilter
             GlobalConfiguration.Configuration.Filters.Add(new JwtAuthFilter());
         }
+
+        protected void Application_BeginRequest()
+        {
+            if (Request.Headers.AllKeys.Contains("Origin") && Request.HttpMethod == "OPTIONS")
+            {
+                Response.End();
+            }
+        }
     }
 }

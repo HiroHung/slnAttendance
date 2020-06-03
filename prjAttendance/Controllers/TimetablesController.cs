@@ -18,28 +18,37 @@ namespace prjAttendance.Controllers
         private Model db = new Model();
 
         // GET: api/Timetables
-        public IHttpActionResult GetTimetables()
+        [Route("api/teach/timetables")]
+        public IHttpActionResult GetTimetable()
         {
-            return Ok();
-        }
-
-        // GET: api/Timetables/5
-        [ResponseType(typeof(Timetable))]
-        public IHttpActionResult GetTimetable(string Token,int Week)
-        {
-            JwtAuthUtil jwtAuthUtil = new JwtAuthUtil();
-            var tid = Convert.ToInt32(jwtAuthUtil.GetId(Token));
-            var result = db.Timetables.Select(x => new
+            string Token = Request.Headers.Authorization.Parameter;
+            int tid = JwtAuthUtil.GetId(Token);
+            int Week = Utility.GetWeek();
+            if (Week == 0)
             {
-                x.Week,
-                x.Subject,
-                x.LessonOrder,
-                x.TeacherId,
-                x.Class.ClassName
-            }).Where(x => x.TeacherId == tid && x.Week == Week);
-            return Ok(result);
+                return Ok(new
+                {
+                    code=5588,
+                    message="假日無課表"
+                });
+            }
+            var result = db.Timetables
+                .Where(x => x.TeacherId == tid && (int)x.Week == Week).OrderBy(x=>x.LessonOrder)
+                .Select(x => new
+                {
+                    x.Subject,
+                    LessonOrder = x.LessonOrder,
+                    x.ClassId,
+                    x.Class.ClassName
+                });
+            return Ok(new
+            {
+                code = 1,
+                data = result
+            });
         }
 
+        
         // PUT: api/Timetables/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutTimetable(int id, Timetable timetable)

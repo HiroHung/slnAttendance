@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,15 +14,9 @@ namespace prjAttendance.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { set; get; }
         public string Name { set; get; }
-        
         //學號
-        public string StudentId { set; get; }
-
+        public string StudentNumber { set; get; }
         public int TeacherId { set; get; }
-        ////ForeignKey
-        //[ForeignKey("TeacherId")]
-        //public virtual Teacher Teacher { set; get; }
-
 
         public int ClasssId { set; get; }
         //ForeignKey
@@ -30,7 +25,8 @@ namespace prjAttendance.Models
         public DateTime BirthDate { set; get; }
         public string Address { set; get; }
         public string IDcardNumber { set; get; }
-        public string Gender { set; get; }
+        public GenderType Gender { set; get; }
         public string Permission { set; get; }
+        public virtual ICollection<Record> Records { get; set; }
     }
 }

@@ -22,14 +22,13 @@ namespace prjAttendance.Models
         public DateTime LessonDate { set; get; }
 
         //  1~5代表星期一到星期五
-        public int Week { set; get; }
+        public WeekType Week { set; get; }
 
-        //  0~9，0:早自修  9:午休  ，其他代表第幾堂課
-        public int LessonOrder { set; get; }
+        public double LessonOrder { set; get; }
         public int ClassId{ set; get; }
 
         //  出席狀態，0:出席  1:遲到  2:事假  3:病假  4:喪假  5:曠課
-        public int Attendance { set; get; }
+        public AttendanceType Attendance { set; get; }
         public int RollCallTeacherId { set; get; }
     }
 }

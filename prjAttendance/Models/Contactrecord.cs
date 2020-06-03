@@ -19,9 +19,9 @@ namespace prjAttendance.Models
         public int StudentId { set; get; }
         //聯繫的學生監護人
         public string ContactGuardian { set; get; }
+        public string Method { set; get; }
         public string Reason { set; get; }
-        //  0:沒有聯繫到  1:有聯繫到
-        public int Results { set; get; }
+        public string Results { set; get; }
 
 
     }

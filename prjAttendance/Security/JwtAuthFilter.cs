@@ -21,7 +21,11 @@ namespace prjAttendance.Security
             {
                 if (request.Headers.Authorization == null || request.Headers.Authorization.Scheme != "Bearer")
                 {
-                    setErrorResponse(actionContext, "Lost Token");
+                    actionContext.Request.CreateResponse(HttpStatusCode.OK, new
+                    {
+                        code = 5566,
+                        message = "Lost Token"
+                    });
                 }
                 else
                 {
@@ -31,7 +35,11 @@ namespace prjAttendance.Security
                         JwsAlgorithm.HS512);
                     if (IsTokenExpired(jwtObject["Exp"].ToString()))
                     {
-                        setErrorResponse(actionContext, "Token Expired");
+                        actionContext.Request.CreateResponse(HttpStatusCode.OK, new
+                        {
+                            code = 5566,
+                            message = "Token Expired"
+                        });
                     }
                 }
             }
@@ -41,7 +49,7 @@ namespace prjAttendance.Security
         //Login不需要驗證因為還沒有token
         public bool WithoutVerifyToken(string requestUri)
         {
-            if (requestUri.EndsWith("/Login")|| requestUri.EndsWith("/Index"))
+            if (requestUri.EndsWith("/login") || requestUri.EndsWith("/index/button"))
                 return true;
             return false;
         }
@@ -50,12 +58,6 @@ namespace prjAttendance.Security
         public bool IsTokenExpired(string dateTime)
         {
             return Convert.ToDateTime(dateTime) < DateTime.Now;
-        }
-
-        private static void setErrorResponse(HttpActionContext actionContext, string message)
-        {
-            var response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, message);
-            actionContext.Response = response;
         }
     }
 }
