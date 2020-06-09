@@ -18,8 +18,8 @@ namespace prjAttendance.Controllers
         private Model db = new Model();
 
         // GET: api/MentorRecords
-        [ResponseType(typeof(Record))]
         [Route("api/mentor/todayrecords")]
+        [ResponseType(typeof(Record))]
         public IHttpActionResult GetRecords()
         {
             DateTime Sdate = DateTime.Today;
@@ -28,12 +28,12 @@ namespace prjAttendance.Controllers
             int id = JwtAuthUtil.GetId(Token);
             var todaydatas = db.Records.Where(x => x.LessonDate >= Sdate && x.LessonDate <= Edate && x.Student.TeacherId == id);
             var gropBydatas = todaydatas.GroupBy(x => x.LessonOrder);
-            var records =gropBydatas.Select(x => new
+            var records = gropBydatas.Select(x => new
             {
                 result = new
                 {
-                    LessonOrder=x.Key,
-                    遲到=x.Where(y=>y.Attendance == AttendanceType.遲到).Select(y=>new
+                    LessonOrder = x.Key,
+                    遲到 = x.Where(y => y.Attendance == AttendanceType.遲到).Select(y => new
                     {
                         y.Student.Name
                     }),
@@ -61,22 +61,123 @@ namespace prjAttendance.Controllers
             });
             return Ok(new
             {
-                code=1,
-                data=records
+                code = 1,
+                data = records
             });
         }
 
-        // GET: api/MentorRecords/5
+        [Route("api/mentor/absenteeism")]
         [ResponseType(typeof(Record))]
-        public IHttpActionResult GetRecord(int id)
+        public IHttpActionResult Getabsenteeism()
         {
-            Record record = db.Records.Find(id);
-            if (record == null)
+            string Token = Request.Headers.Authorization.Parameter;
+            int id = JwtAuthUtil.GetId(Token);
+            var groups = db.Records.Where(x=>x.Student.TeacherId==id).GroupBy(x => x.StudentId);
+            
+            var record = groups.Select(x => new
             {
-                return NotFound();
-            }
+                StudentId = x.Key,
+                Name = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Name).FirstOrDefault(),
+                Times = x.Where(y => y.Attendance == AttendanceType.曠課).Count(),
+                //Attendance = x.Where(y => y.Attendance == AttendanceType.曠課).Select(y => y.Attendance).FirstOrDefault().ToString()
+            })/*.Where(x => x.Attendance == "曠課")*/.OrderByDescending(x => x.Times).ThenBy(x=>x.StudentId);
+            return Ok(new
+            {
+                code=1,
+                data= record.ToList()
+            });
+        }
+        [Route("api/mentor/leave")]
+        [ResponseType(typeof(Record))]
+        public IHttpActionResult Getleave()
+        {
+            string Token = Request.Headers.Authorization.Parameter;
+            int id = JwtAuthUtil.GetId(Token);
+            var groups = db.Records.Where(x => x.Student.TeacherId == id).GroupBy(x => x.StudentId);
 
-            return Ok(record);
+            var record = groups.Select(x => new
+            {
+                StudentId = x.Key,
+                Name = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Name).FirstOrDefault(),
+                Times = x.Where(y => y.Attendance == AttendanceType.事假).Count()+ x.Where(y => y.Attendance == AttendanceType.喪假).Count()+ x.Where(y => y.Attendance == AttendanceType.病假).Count(),
+                //Attendance = x.Where(y => y.Attendance == AttendanceType.曠課).Select(y => y.Attendance).FirstOrDefault().ToString()
+            })/*.Where(x => x.Attendance == "曠課")*/.OrderByDescending(x => x.Times).ThenBy(x => x.StudentId);
+            return Ok(new
+            {
+                code = 1,
+                data = record.ToList()
+            });
+        }
+        [Route("api/mentor/deduction")]
+        [ResponseType(typeof(Record))]
+        public IHttpActionResult Getdeductione()
+        {
+            string Token = Request.Headers.Authorization.Parameter;
+            int id = JwtAuthUtil.GetId(Token);
+            var groups = db.Records.Where(x => x.Student.TeacherId == id).GroupBy(x => x.StudentId);
+
+            var record = groups.Select(x => new
+            {
+                StudentId = x.Key,
+                StudentNumber= x.Where(y => y.StudentId == x.Key).Select(y => y.Student.StudentNumber).FirstOrDefault(),
+                Name = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Name).FirstOrDefault(),
+                Deduction = x.Count(y => y.Attendance == AttendanceType.事假)/20*-1 + x.Count(y => y.Attendance == AttendanceType.病假)/50*-1 + x.Count(y => y.Attendance == AttendanceType.曠課)/2*-1+ x.Count(y => y.Attendance == AttendanceType.遲到) / 3 * -1,
+                事假次數= x.Count(y => y.Attendance == AttendanceType.事假),
+                事假扣分= x.Count(y => y.Attendance == AttendanceType.事假) / 20 * -1,
+                病假次數 = x.Count(y => y.Attendance == AttendanceType.病假),
+                病假扣分= x.Count(y => y.Attendance == AttendanceType.病假) / 50 * -1,
+                喪假次數 = x.Count(y => y.Attendance == AttendanceType.喪假),
+                喪假扣分 = x.Count(y => y.Attendance == AttendanceType.喪假)*0,
+                曠課次數 = x.Count(y => y.Attendance == AttendanceType.曠課),
+                曠課扣分= x.Count(y => y.Attendance == AttendanceType.曠課) / 2 * -1,
+                遲到次數 = x.Count(y => y.Attendance == AttendanceType.遲到),
+                遲到扣分= x.Count(y => y.Attendance == AttendanceType.遲到) / 3 * -1,
+                Guardian = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Guardian).FirstOrDefault(),
+                PhoneNunber= x.Where(y => y.StudentId == x.Key).Select(y => y.Student.PhoneNumber).FirstOrDefault(),
+                Address = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Address).FirstOrDefault()
+            }).OrderBy(x => x.Deduction).ThenBy(x => x.StudentId);
+            return Ok(new
+            {
+                code = 1,
+                data = record.ToList()
+            });
+        }
+        // GET: api/MentorRecords/5
+        [Route("api/mentor/attendance/search")]
+        [ResponseType(typeof(Record))]
+        public IHttpActionResult GetRecord([FromUri]ViewSearch viewSearch)
+        {
+            string Token = Request.Headers.Authorization.Parameter;
+            int id = JwtAuthUtil.GetId(Token);
+            var result = db.Records.AsQueryable();
+            if (viewSearch.StudentId.HasValue)
+            {
+                result = result.Where(x => x.StudentId == viewSearch.StudentId);
+            }
+            if (viewSearch.StartDate.HasValue && viewSearch.EndDate.HasValue)
+            {
+                //因為LessonDate設定為Datetime.today，所以不須再加一天，如下行處理
+                //Search.EndDate = viewSearch.EndDate.Value.AddDays(1);
+                result = result.Where(x => x.LessonDate >= viewSearch.StartDate && x.LessonDate <= viewSearch.EndDate);
+            }
+            if (viewSearch.Attendance.HasValue)
+            {
+                result = result.Where(x => x.Attendance == viewSearch.Attendance);
+            }
+            return Ok(new
+            {
+                code = 1,
+                data = result.Where(x => x.Student.TeacherId == id).Select(x => new
+                {
+                    Id = x.Id,
+                    Name = x.Student.Name,
+                    Date = x.LessonDate,
+                    LessonOrder = x.LessonOrder,
+                    Subject=x.Subject,
+                    RollCallTeacherId=db.Teachers.Where(y=>y.Id==x.RollCallTeacherId).Select(y=>y.Name).FirstOrDefault(),
+                    Attendance = x.Attendance.ToString()
+                }).OrderBy(x => x.Date).ToList()
+            });
         }
 
         // PUT: api/MentorRecords/5

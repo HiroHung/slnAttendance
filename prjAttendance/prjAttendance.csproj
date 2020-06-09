@@ -144,6 +144,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdministrationClassesController.cs" />
+    <Compile Include="Controllers\AdministrationRecordsController.cs" />
+    <Compile Include="Controllers\AdministrationStudentController.cs" />
+    <Compile Include="Controllers\ContactrecordsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MentorRecordsController.cs" />
     <Compile Include="Controllers\MentorStudentsController.cs" />
@@ -258,6 +262,26 @@
     <Compile Include="Migrations\202006020817304_RecordClassName.Designer.cs">
       <DependentUpon>202006020817304_RecordClassName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202006031552043_RecordInsetSubject.cs" />
+    <Compile Include="Migrations\202006031552043_RecordInsetSubject.Designer.cs">
+      <DependentUpon>202006031552043_RecordInsetSubject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006050233574_eeditContactRecordContactDateTime.cs" />
+    <Compile Include="Migrations\202006050233574_eeditContactRecordContactDateTime.Designer.cs">
+      <DependentUpon>202006050233574_eeditContactRecordContactDateTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006050239422_editContactRecordContactDateTime2.cs" />
+    <Compile Include="Migrations\202006050239422_editContactRecordContactDateTime2.Designer.cs">
+      <DependentUpon>202006050239422_editContactRecordContactDateTime2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006080343575_editContactRecordContactDateTime.cs" />
+    <Compile Include="Migrations\202006080343575_editContactRecordContactDateTime.Designer.cs">
+      <DependentUpon>202006080343575_editContactRecordContactDateTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006080953086_StudentGuardianPhoneNumber.cs" />
+    <Compile Include="Migrations\202006080953086_StudentGuardianPhoneNumber.Designer.cs">
+      <DependentUpon>202006080953086_StudentGuardianPhoneNumber.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Class.cs" />
     <Compile Include="Models\Contactrecord.cs" />
@@ -271,6 +295,7 @@
     <Compile Include="Models\Utility.cs" />
     <Compile Include="Models\ViewLogin.cs" />
     <Compile Include="Models\ViewRecord.cs" />
+    <Compile Include="Models\ViewSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\JwtAuthFilter.cs" />
     <Compile Include="Security\JwtAuthUtil.cs" />
@@ -406,6 +431,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202006020817304_RecordClassName.resx">
       <DependentUpon>202006020817304_RecordClassName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006031552043_RecordInsetSubject.resx">
+      <DependentUpon>202006031552043_RecordInsetSubject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006050233574_eeditContactRecordContactDateTime.resx">
+      <DependentUpon>202006050233574_eeditContactRecordContactDateTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006050239422_editContactRecordContactDateTime2.resx">
+      <DependentUpon>202006050239422_editContactRecordContactDateTime2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006080343575_editContactRecordContactDateTime.resx">
+      <DependentUpon>202006080343575_editContactRecordContactDateTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006080953086_StudentGuardianPhoneNumber.resx">
+      <DependentUpon>202006080953086_StudentGuardianPhoneNumber.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -97,6 +97,10 @@ namespace prjAttendance.Models
                     return 4;
                 case "Friday":
                     return 5;
+                case "Saturday":
+                    return 6;
+                case "Sunday":
+                    return 7;
                 default:
                     return 0;
             }

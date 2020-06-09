@@ -11,7 +11,9 @@ namespace prjAttendance.Models
         星期二=2,
         星期三=3,
         星期四=4,
-        星期五=5
+        星期五=5,
+        星期六=6,
+        星期天=7
     }
 
     public enum AttendanceType

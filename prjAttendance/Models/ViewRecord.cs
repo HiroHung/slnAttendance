@@ -9,6 +9,7 @@ namespace prjAttendance.Models
     {
         public int ClassId { set; get; }
         public double LessonOrder { set; get; }
+        public  string Subject { set; get; }
         public StudentInfo[] StudentInfo { set; get; }
 }
 

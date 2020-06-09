@@ -98,6 +98,7 @@ namespace prjAttendance.Controllers
             Record record = new Record();
             foreach (var infoitem in viewRecord.StudentInfo)
             {
+                record.Subject = viewRecord.Subject;
                 record.ClassId = viewRecord.ClassId;
                 record.LessonOrder = viewRecord.LessonOrder;
                 record.RollCallTime = DateTime.Now;

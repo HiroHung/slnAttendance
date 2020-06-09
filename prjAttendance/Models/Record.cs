@@ -30,5 +30,6 @@ namespace prjAttendance.Models
         //  出席狀態，0:出席  1:遲到  2:事假  3:病假  4:喪假  5:曠課
         public AttendanceType Attendance { set; get; }
         public int RollCallTeacherId { set; get; }
+        public string Subject { set; get; }
     }
 }
