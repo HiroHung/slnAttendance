@@ -104,12 +104,12 @@ namespace prjAttendance.Controllers
                     Address = db.Students.Where(y => y.Id == x.Key).Select(y => y.Address).FirstOrDefault(),
                     Guardian = db.Students.Where(y => y.Id == x.Key).Select(y => y.Guardian).FirstOrDefault(),
                     Times = x.Count(),
-                    result = new
+                    result=x.Where(y => y.StudentId == x.Key).Select(y=>new
                     {
-                        LessonDate = x.Where(y => y.StudentId == x.Key).Select(y => y.LessonDate),
-                        LessonOrder = x.OrderBy(y=>y.LessonDate).Where(y => y.StudentId == x.Key).Select(y => y.LessonOrder),
-                        Subject = x.OrderBy(y=>y.LessonDate).Where(y => y.StudentId == x.Key).Select(y => y.Subject)
-                    }
+                        LessonDate=y.LessonDate,
+                        LessonOrder=y.LessonOrder,
+                        Subject=y.Subject
+                    })
                 });
                 return Ok(new
                 {
