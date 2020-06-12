@@ -14,16 +14,10 @@ using prjAttendance.Security;
 
 namespace prjAttendance.Controllers
 {
-    public class TeachRecordsController : ApiController
+    public class TeachersRecordsController : ApiController
     {
         private Model db = new Model();
-        // GET: api/Records
-        public IQueryable<Record> GetRecords()
-        {
-            return db.Records;
-        }
 
-        // GET: api/Records/5
         [Route("api/teach/records")]
         [ResponseType(typeof(Record))]
         public IHttpActionResult GetRecord(double LessonOrder, int ClassId)
@@ -68,7 +62,6 @@ namespace prjAttendance.Controllers
             }
         }
 
-        // PUT: api/Records/5
         [HttpPut]
         [Route("api/teach/records/update")]
         [ResponseType(typeof(void))]
@@ -118,34 +111,5 @@ namespace prjAttendance.Controllers
             });
         }
 
-        // DELETE: api/Records/5
-        [ResponseType(typeof(Record))]
-        public IHttpActionResult DeleteRecord(int id)
-        {
-            Record record = db.Records.Find(id);
-            if (record == null)
-            {
-                return NotFound();
-            }
-
-            db.Records.Remove(record);
-            db.SaveChanges();
-
-            return Ok(record);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool RecordExists(int id)
-        {
-            return db.Records.Count(e => e.Id == id) > 0;
-        }
     }
 }

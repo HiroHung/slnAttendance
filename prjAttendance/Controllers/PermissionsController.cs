@@ -29,6 +29,7 @@ namespace prjAttendance.Controllers
                 data=result
             });
         }
+
         //取得登入使用者權限
         [Route("api/login/permissions")]
         public IHttpActionResult GetLoginPermission()
@@ -43,97 +44,5 @@ namespace prjAttendance.Controllers
             });
         }
 
-        // GET: api/Permissions/5
-        [ResponseType(typeof(Permission))]
-        public IHttpActionResult GetPermission(int id)
-        {
-            Permission permission = db.Permission.Find(id);
-            if (permission == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(permission);
-        }
-
-        // PUT: api/Permissions/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutPermission(int id, Permission permission)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != permission.id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(permission).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PermissionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Permissions
-        [ResponseType(typeof(Permission))]
-        public IHttpActionResult PostPermission(Permission permission)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Permission.Add(permission);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = permission.id }, permission);
-        }
-
-        // DELETE: api/Permissions/5
-        [ResponseType(typeof(Permission))]
-        public IHttpActionResult DeletePermission(int id)
-        {
-            Permission permission = db.Permission.Find(id);
-            if (permission == null)
-            {
-                return NotFound();
-            }
-
-            db.Permission.Remove(permission);
-            db.SaveChanges();
-
-            return Ok(permission);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool PermissionExists(int id)
-        {
-            return db.Permission.Count(e => e.id == id) > 0;
-        }
     }
 }

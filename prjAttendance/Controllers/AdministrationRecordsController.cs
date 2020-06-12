@@ -47,7 +47,7 @@ namespace prjAttendance.Controllers
                     Date = x.LessonDate,
                     LessonOrder = x.LessonOrder,
                     Attendance = x.Attendance.ToString()
-                }).OrderBy(x => x.Date).ToList()
+                }).OrderBy(x => x.Date).ThenBy(x=>x.LessonOrder).ToList()
             });
         }
 
@@ -90,9 +90,8 @@ namespace prjAttendance.Controllers
 
         [Route("api/administration/record/notification")]
         [HttpGet]
-        public IHttpActionResult GetAdministrationnotification([FromUri] ViewSearch viewSearch)
+        public IHttpActionResult GetAdministrationNotification([FromUri] ViewSearch viewSearch)
         {
-
             if (viewSearch.StartDate.HasValue && viewSearch.EndDate.HasValue)
             {
                 //因為LessonDate設定為Datetime.today，所以不須再加一天，如下行處理
@@ -105,12 +104,12 @@ namespace prjAttendance.Controllers
                     Address = db.Students.Where(y => y.Id == x.Key).Select(y => y.Address).FirstOrDefault(),
                     Guardian = db.Students.Where(y => y.Id == x.Key).Select(y => y.Guardian).FirstOrDefault(),
                     Times = x.Count(),
-                    result = x.Select(y => new
+                    result = new
                     {
-                        LessonDate = x.Where(z => z.StudentId == x.Key).Select(z => z.LessonDate).FirstOrDefault(),
-                        LessonOrder = x.Where(z => z.StudentId == x.Key).Select(z => z.LessonOrder).FirstOrDefault(),
-                        Subject = x.Where(z => z.StudentId == x.Key).Select(z => z.Subject).FirstOrDefault(),
-                    })
+                        LessonDate = x.Where(y => y.StudentId == x.Key).Select(y => y.LessonDate),
+                        LessonOrder = x.OrderBy(y=>y.LessonDate).Where(y => y.StudentId == x.Key).Select(y => y.LessonOrder),
+                        Subject = x.OrderBy(y=>y.LessonDate).Where(y => y.StudentId == x.Key).Select(y => y.Subject)
+                    }
                 });
                 return Ok(new
                 {

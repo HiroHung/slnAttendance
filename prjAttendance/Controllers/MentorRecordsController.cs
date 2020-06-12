@@ -17,7 +17,6 @@ namespace prjAttendance.Controllers
     {
         private Model db = new Model();
 
-        // GET: api/MentorRecords
         [Route("api/mentor/todayrecords")]
         [ResponseType(typeof(Record))]
         public IHttpActionResult GetRecords()
@@ -87,6 +86,7 @@ namespace prjAttendance.Controllers
                 data= record.ToList()
             });
         }
+       
         [Route("api/mentor/leave")]
         [ResponseType(typeof(Record))]
         public IHttpActionResult Getleave()
@@ -108,6 +108,7 @@ namespace prjAttendance.Controllers
                 data = record.ToList()
             });
         }
+        
         [Route("api/mentor/deduction")]
         [ResponseType(typeof(Record))]
         public IHttpActionResult Getdeductione()
@@ -142,7 +143,7 @@ namespace prjAttendance.Controllers
                 data = record.ToList()
             });
         }
-        // GET: api/MentorRecords/5
+
         [Route("api/mentor/attendance/search")]
         [ResponseType(typeof(Record))]
         public IHttpActionResult GetRecord([FromUri]ViewSearch viewSearch)
@@ -180,84 +181,5 @@ namespace prjAttendance.Controllers
             });
         }
 
-        // PUT: api/MentorRecords/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutRecord(int id, Record record)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != record.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(record).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RecordExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/MentorRecords
-        [ResponseType(typeof(Record))]
-        public IHttpActionResult PostRecord(Record record)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Records.Add(record);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = record.Id }, record);
-        }
-
-        // DELETE: api/MentorRecords/5
-        [ResponseType(typeof(Record))]
-        public IHttpActionResult DeleteRecord(int id)
-        {
-            Record record = db.Records.Find(id);
-            if (record == null)
-            {
-                return NotFound();
-            }
-
-            db.Records.Remove(record);
-            db.SaveChanges();
-
-            return Ok(record);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool RecordExists(int id)
-        {
-            return db.Records.Count(e => e.Id == id) > 0;
-        }
     }
 }

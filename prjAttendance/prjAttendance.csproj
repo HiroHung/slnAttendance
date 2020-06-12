@@ -152,7 +152,8 @@
     <Compile Include="Controllers\MentorRecordsController.cs" />
     <Compile Include="Controllers\MentorStudentsController.cs" />
     <Compile Include="Controllers\PermissionsController.cs" />
-    <Compile Include="Controllers\TeachRecordsController.cs" />
+    <Compile Include="Controllers\StudentsRecordsController.cs" />
+    <Compile Include="Controllers\TeachersRecordsController.cs" />
     <Compile Include="Controllers\TeachersApiController.cs" />
     <Compile Include="Controllers\TimetablesController.cs" />
     <Compile Include="Global.asax.cs">
