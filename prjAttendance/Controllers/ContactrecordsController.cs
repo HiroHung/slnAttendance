@@ -17,13 +17,6 @@ namespace prjAttendance.Controllers
     {
         private Model db = new Model();
 
-        // GET: api/Contactrecords
-        public IQueryable<Contactrecord> GetContactrecords()
-        {
-            return db.Contactrecords;
-        }
-
-        // GET: api/Contactrecords/5
         [ResponseType(typeof(Contactrecord))]
         [Route("api/mentor/contactrecord/search/list")]
         public IHttpActionResult GetContactrecordList([FromUri]ViewSearch viewSearch)
@@ -76,39 +69,38 @@ namespace prjAttendance.Controllers
             });
         }
 
-        // PUT: api/Contactrecords/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutContactrecord(int id, Contactrecord contactrecord)
+        [ResponseType(typeof(Contactrecord))]
+        [Route("api/mentor/contactrecord/print")]
+        public IHttpActionResult GetContactrecordPrint([FromUri]ViewSearch viewSearch)
         {
-            if (!ModelState.IsValid)
+            string Token = Request.Headers.Authorization.Parameter;
+            int id = JwtAuthUtil.GetId(Token);
+            var result = db.Contactrecords.AsQueryable();
+            if (viewSearch.StudentId.HasValue)
             {
-                return BadRequest(ModelState);
+                result = result.Where(x => x.StudentId == viewSearch.StudentId);
+            }
+            if (viewSearch.StartDate.HasValue && viewSearch.EndDate.HasValue)
+            {
+                viewSearch.EndDate = viewSearch.EndDate.Value.AddDays(1);
+                result = result.Where(x => x.ContactDateTime >= viewSearch.StartDate && x.ContactDateTime <= viewSearch.EndDate);
             }
 
-            if (id != contactrecord.Id)
+            return Ok(new
             {
-                return BadRequest();
-            }
-
-            db.Entry(contactrecord).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ContactrecordExists(id))
+                code = 1,
+                data = result.Where(x => x.TeacherId == id).Select(x => new
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
+                    Id = x.Id,
+                    Time = x.ContactDateTime,
+                    StudentName = db.Students.Where(y => y.Id == x.StudentId).Select(y => y.Name).FirstOrDefault(),
+                    ContactGuardian = x.ContactGuardian,
+                    Teacher = x.Teacher.Name,
+                    Method = x.Method,
+                    Reason = x.Reason,
+                    Results = x.Results
+                })
+            });
         }
 
         // POST: api/Contactrecords
@@ -134,34 +126,5 @@ namespace prjAttendance.Controllers
             });
         }
 
-        // DELETE: api/Contactrecords/5
-        [ResponseType(typeof(Contactrecord))]
-        public IHttpActionResult DeleteContactrecord(int id)
-        {
-            Contactrecord contactrecord = db.Contactrecords.Find(id);
-            if (contactrecord == null)
-            {
-                return NotFound();
-            }
-
-            db.Contactrecords.Remove(contactrecord);
-            db.SaveChanges();
-
-            return Ok(contactrecord);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool ContactrecordExists(int id)
-        {
-            return db.Contactrecords.Count(e => e.Id == id) > 0;
-        }
     }
 }

@@ -47,7 +47,7 @@ namespace prjAttendance.Controllers
                     Date = x.LessonDate,
                     LessonOrder = x.LessonOrder,
                     Attendance = x.Attendance.ToString()
-                }).OrderBy(x => x.Date).ThenBy(x=>x.LessonOrder).ToList()
+                }).OrderBy(x => x.Date).ThenBy(x => x.LessonOrder).ToList()
             });
         }
 
@@ -100,15 +100,17 @@ namespace prjAttendance.Controllers
                 var record = groups.Select(x => new
                 {
                     StudentId = x.Key,
+                    Class = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Class.ClassName).FirstOrDefault(),
+                    StudentNumber = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.StudentNumber).FirstOrDefault(),
                     Name = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Name).FirstOrDefault(),
                     Address = db.Students.Where(y => y.Id == x.Key).Select(y => y.Address).FirstOrDefault(),
                     Guardian = db.Students.Where(y => y.Id == x.Key).Select(y => y.Guardian).FirstOrDefault(),
                     Times = x.Count(),
-                    result=x.Where(y => y.StudentId == x.Key).Select(y=>new
+                    result = x.Where(y => y.StudentId == x.Key).Select(y => new
                     {
-                        LessonDate=y.LessonDate,
-                        LessonOrder=y.LessonOrder,
-                        Subject=y.Subject
+                        LessonDate = y.LessonDate,
+                        LessonOrder = y.LessonOrder,
+                        Subject = y.Subject
                     })
                 });
                 return Ok(new
@@ -121,7 +123,7 @@ namespace prjAttendance.Controllers
             return Ok(new
             {
                 code = 5588,
-                message="請選擇起訖時間"
+                message = "請選擇起訖時間"
             });
         }
     }
