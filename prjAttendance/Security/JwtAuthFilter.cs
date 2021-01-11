@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web;
+using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Jose;
@@ -19,27 +20,52 @@ namespace prjAttendance.Security
             var request = actionContext.Request;
             if (!WithoutVerifyToken(request.RequestUri.ToString()))
             {
-                if (request.Headers.Authorization == null || request.Headers.Authorization.Scheme != "Bearer")
+                if (request.Headers.Authorization==null || request.Headers.Authorization.Scheme != "Bearer")
                 {
-                    actionContext.Request.CreateResponse(HttpStatusCode.OK, new
+                    var errorMessage = new HttpResponseMessage()
                     {
-                        code = 5566,
-                        message = "Lost Token"
-                    });
+                        ReasonPhrase = "Lost Token",
+                        Content = new StringContent(" code = 5566"),
+                    };
+                    throw new HttpResponseException(errorMessage);
+                    //actionContext.Request.CreateResponse(HttpStatusCode.OK, new
+                    //{
+                    //    code = 5566,
+                    //    message = "Lost Token"
+                    //});
                 }
                 else
                 {
-                    var jwtObject = Jose.JWT.Decode<Dictionary<string, Object>>(
-                        request.Headers.Authorization.Parameter,
-                        Encoding.UTF8.GetBytes(secret),
-                        JwsAlgorithm.HS512);
-                    if (IsTokenExpired(jwtObject["Exp"].ToString()))
+                    try
                     {
-                        actionContext.Request.CreateResponse(HttpStatusCode.OK, new
+                        var jwtObject = Jose.JWT.Decode<Dictionary<string, Object>>(
+                            request.Headers.Authorization.Parameter,
+                            Encoding.UTF8.GetBytes(secret),
+                            JwsAlgorithm.HS512);
+                        if (IsTokenExpired(jwtObject["Exp"].ToString()))
                         {
-                            code = 5566,
-                            message = "Token Expired"
-                        });
+                            var errorMessage = new HttpResponseMessage()
+                            {
+                                ReasonPhrase = "Token Expired",
+                                Content = new StringContent(" code = 5566"),
+                            };
+                            throw new HttpResponseException(errorMessage);
+
+                            //actionContext.Request.CreateResponse(HttpStatusCode.OK, new
+                            //{
+                            //    code = 5566,
+                            //    message = "Token Expired"
+                            //});
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        var errorMessage = new HttpResponseMessage()
+                        {
+                            ReasonPhrase = "Lost Token",
+                            Content = new StringContent($"code = 5566,發生錯誤：{e}"),
+                        };
+                        throw new HttpResponseException(errorMessage);
                     }
                 }
             }

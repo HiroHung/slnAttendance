@@ -29,6 +29,7 @@ namespace prjAttendance.Models
         public string Permission { set; get; }
         public string Guardian { set; get; }
         public string PhoneNumber { set; get; }
+
         public virtual ICollection<Record> Records { get; set; }
     }
 }

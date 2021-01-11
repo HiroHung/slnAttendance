@@ -23,7 +23,7 @@ namespace prjAttendance.Controllers
         {
             string Token = Request.Headers.Authorization.Parameter;
             int id = JwtAuthUtil.GetId(Token);
-            var result = db.Contactrecords.AsQueryable();
+            var result = db.Contactrecords.Where(x => x.TeacherId == id).AsQueryable();
             if (viewSearch.StudentId.HasValue)
             {
                 result = result.Where(x => x.StudentId == viewSearch.StudentId);
@@ -34,17 +34,19 @@ namespace prjAttendance.Controllers
                 viewSearch.EndDate = viewSearch.EndDate.Value.AddDays(1);
                 result = result.Where(x => x.ContactDateTime >= viewSearch.StartDate && x.ContactDateTime <= viewSearch.EndDate);
             }
-
+       
+            var students = db.Students.AsQueryable();
+            var data = result.Select(x => new
+            {
+                Id = x.Id,
+                Time = x.ContactDateTime,
+                StudentName = students.FirstOrDefault(y => y.Id == x.StudentId).Name,
+                ContactGuardian = x.ContactGuardian
+            });
             return Ok(new
             {
                 code=1,
-                data=result.Where( x=> x.TeacherId == id).Select(x=>new
-                {
-                    Id=x.Id,
-                    Time=x.ContactDateTime,
-                    StudentName=db.Students.Where(y=>y.Id==x.StudentId).Select(y=>y.Name).FirstOrDefault(),
-                    ContactGuardian=x.ContactGuardian
-                })
+                data=data
             });
         }
 
@@ -52,11 +54,13 @@ namespace prjAttendance.Controllers
         [Route("api/mentor/contactrecord/search/details")]
         public IHttpActionResult GetContactrecordDetails(int Id)
         {
-            var result = db.Contactrecords.Where(x => x.Id == Id).Select(x=>new
+            var students = db.Students.ToList();
+            var contactrecord = db.Contactrecords.Where(x => x.Id == Id).ToList();
+            var result = contactrecord.Select(x=>new
             {
                 Time=x.ContactDateTime,
                 Teacher=x.Teacher.Name,
-                StudentName=db.Students.Where(y=>y.Id==x.StudentId).Select(y=>y.Name).FirstOrDefault(),
+                StudentName= students.FirstOrDefault(y=>y.Id==x.StudentId).Name,
                 ContactGuardian = x.ContactGuardian,
                 Method=x.Method,
                 Reason=x.Reason,
@@ -85,21 +89,22 @@ namespace prjAttendance.Controllers
                 viewSearch.EndDate = viewSearch.EndDate.Value.AddDays(1);
                 result = result.Where(x => x.ContactDateTime >= viewSearch.StartDate && x.ContactDateTime <= viewSearch.EndDate);
             }
-
+            var students = db.Students.AsQueryable();
+            var data = result.Select(x => new
+            {
+                Id = x.Id,
+                Time = x.ContactDateTime,
+                StudentName = students.FirstOrDefault(y => y.Id == x.StudentId).Name,
+                ContactGuardian = x.ContactGuardian,
+                Teacher = x.Teacher.Name,
+                Method = x.Method,
+                Reason = x.Reason,
+                Results = x.Results
+            });
             return Ok(new
             {
                 code = 1,
-                data = result.Where(x => x.TeacherId == id).Select(x => new
-                {
-                    Id = x.Id,
-                    Time = x.ContactDateTime,
-                    StudentName = db.Students.Where(y => y.Id == x.StudentId).Select(y => y.Name).FirstOrDefault(),
-                    ContactGuardian = x.ContactGuardian,
-                    Teacher = x.Teacher.Name,
-                    Method = x.Method,
-                    Reason = x.Reason,
-                    Results = x.Results
-                })
+                data =data
             });
         }
 

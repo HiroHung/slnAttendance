@@ -42,7 +42,7 @@ namespace prjAttendance.Controllers
                 data = result.Select(x => new
                 {
                     Id = x.Id,
-                    Class = db.Classes.Where(y => y.Id == x.ClassId).Select(y => y.ClassName).FirstOrDefault(),
+                    Class = x.Student.Class.ClassName,
                     Name = x.Student.Name,
                     Date = x.LessonDate,
                     LessonOrder = x.LessonOrder,
@@ -51,18 +51,21 @@ namespace prjAttendance.Controllers
             });
         }
 
+
         [Route("api/administration/record/search/details")]
         [HttpGet]
         public IHttpActionResult GetAdministrationRecordsDetails(int Id)
         {
-            var result = db.Records.Where(x => x.Id == Id).Select(x => new
+            ICollection<Teacher> rollcallteacher = db.Teachers.ToList();
+            var record = db.Records.Where(x => x.Id == Id).ToList();
+            var result = record.Select(x => new
             {
                 x.Id,
                 x.LessonDate,
                 x.LessonOrder,
                 x.Subject,
-                RollCallTeacher = db.Teachers.Where(y => y.Id == x.RollCallTeacherId).Select(y => y.Name).FirstOrDefault(),
-                Class = db.Classes.Where(y => y.Id == x.ClassId).Select(y => y.ClassName).FirstOrDefault(),
+                RollCallTeacher = rollcallteacher.FirstOrDefault(y => y.Id == x.RollCallTeacherId).Name,
+                Class = x.Student.Class.ClassName,
                 StudentName = x.Student.Name,
                 x.Attendance
             });
@@ -95,18 +98,19 @@ namespace prjAttendance.Controllers
             if (viewSearch.StartDate.HasValue && viewSearch.EndDate.HasValue)
             {
                 //因為LessonDate設定為Datetime.today，所以不須再加一天，如下行處理
-                //Search.EndDate = viewSearch.EndDate.Value.AddDays(1);
+                //Search.End
+                //= viewSearch.EndDate.Value.AddDays(1);
                 var groups = db.Records.Where(x => x.Attendance == AttendanceType.曠課 && x.LessonDate >= viewSearch.StartDate && x.LessonDate <= viewSearch.EndDate).GroupBy(x => x.StudentId);
                 var record = groups.Select(x => new
                 {
                     StudentId = x.Key,
-                    Class = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Class.ClassName).FirstOrDefault(),
-                    StudentNumber = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.StudentNumber).FirstOrDefault(),
-                    Name = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Name).FirstOrDefault(),
-                    Address = db.Students.Where(y => y.Id == x.Key).Select(y => y.Address).FirstOrDefault(),
-                    Guardian = db.Students.Where(y => y.Id == x.Key).Select(y => y.Guardian).FirstOrDefault(),
+                    Class = x.FirstOrDefault().Student.Class.ClassName,
+                    StudentNumber = x.FirstOrDefault().Student.StudentNumber,
+                    Name = x.FirstOrDefault().Student.Name,
+                    Address = x.FirstOrDefault().Student.Address,
+                    Guardian = x.FirstOrDefault().Student.Guardian,
                     Times = x.Count(),
-                    result = x.Where(y => y.StudentId == x.Key).Select(y => new
+                    result = x.Select(y => new
                     {
                         LessonDate = y.LessonDate,
                         LessonOrder = y.LessonOrder,

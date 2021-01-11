@@ -19,6 +19,7 @@ namespace prjAttendance.Controllers
 
         [HttpPost]
         [Route("api/login")]
+        [JwtAuthFilter]
         public HttpResponseMessage Post(ViewLogin viewLogin)
         {
             if (ModelState.IsValid)

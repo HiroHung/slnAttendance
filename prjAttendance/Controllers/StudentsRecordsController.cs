@@ -18,7 +18,7 @@ namespace prjAttendance.Controllers
         public IHttpActionResult GetStudentsRecords([FromUri] ViewSearch viewSearch)
         {
             int id = JwtAuthUtil.GetId(Request.Headers.Authorization.Parameter);
-            var result = db.Records.AsQueryable();
+            var result = db.Records.Where(x => x.StudentId == id).AsQueryable();
             if (viewSearch.StartDate.HasValue && viewSearch.EndDate.HasValue)
             {
                 //因為LessonDate設定為Datetime.today，所以不須再加一天，如下行處理
@@ -29,17 +29,19 @@ namespace prjAttendance.Controllers
             {
                 result = result.Where(x => x.Attendance == viewSearch.Attendance);
             }
+            var teacher = db.Teachers.AsQueryable();
+            var data = result.Select(x => new
+            {
+                x.LessonDate,
+                x.LessonOrder,
+                x.Subject,
+                Teacher = teacher.FirstOrDefault(y => y.Id == x.RollCallTeacherId).Name,
+                Attendance = x.Attendance.ToString()
+            }).OrderBy(x => x.LessonDate).ToList();
             return Ok(new
             {
                 code = 1,
-                data = result.Where(x=>x.StudentId==id).Select(x => new
-                {
-                    x.LessonDate,
-                    x.LessonOrder,
-                    x.Subject,
-                    Teacher=db.Teachers.Where(y=>y.Id==x.RollCallTeacherId).Select(y=>y.Name).FirstOrDefault(),
-                    Attendance = x.Attendance.ToString()
-                }).OrderBy(x => x.LessonDate).ToList()
+                data = data
             });
         }
 

@@ -76,7 +76,7 @@ namespace prjAttendance.Controllers
             var record = groups.Select(x => new
             {
                 StudentId = x.Key,
-                Name = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Name).FirstOrDefault(),
+                Name = x.FirstOrDefault(y => y.StudentId == x.Key).Student.Name,
                 Times = x.Where(y => y.Attendance == AttendanceType.曠課).Count(),
                 //Attendance = x.Where(y => y.Attendance == AttendanceType.曠課).Select(y => y.Attendance).FirstOrDefault().ToString()
             })/*.Where(x => x.Attendance == "曠課")*/.OrderByDescending(x => x.Times).ThenBy(x=>x.StudentId);
@@ -98,7 +98,7 @@ namespace prjAttendance.Controllers
             var record = groups.Select(x => new
             {
                 StudentId = x.Key,
-                Name = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Name).FirstOrDefault(),
+                Name = x.FirstOrDefault(y => y.StudentId == x.Key).Student.Name,
                 Times = x.Where(y => y.Attendance == AttendanceType.事假).Count()+ x.Where(y => y.Attendance == AttendanceType.喪假).Count()+ x.Where(y => y.Attendance == AttendanceType.病假).Count(),
                 //Attendance = x.Where(y => y.Attendance == AttendanceType.曠課).Select(y => y.Attendance).FirstOrDefault().ToString()
             })/*.Where(x => x.Attendance == "曠課")*/.OrderByDescending(x => x.Times).ThenBy(x => x.StudentId);
@@ -120,8 +120,8 @@ namespace prjAttendance.Controllers
             var record = groups.Select(x => new
             {
                 StudentId = x.Key,
-                StudentNumber= x.Where(y => y.StudentId == x.Key).Select(y => y.Student.StudentNumber).FirstOrDefault(),
-                Name = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Name).FirstOrDefault(),
+                StudentNumber= x.FirstOrDefault(y => y.StudentId == x.Key).Student.Id,
+                Name = x.FirstOrDefault(y => y.StudentId == x.Key).Student.Name,
                 Deduction = x.Count(y => y.Attendance == AttendanceType.事假)/20*-1 + x.Count(y => y.Attendance == AttendanceType.病假)/50*-1 + x.Count(y => y.Attendance == AttendanceType.曠課)/2*-1+ x.Count(y => y.Attendance == AttendanceType.遲到) / 3 * -1,
                 事假次數= x.Count(y => y.Attendance == AttendanceType.事假),
                 事假扣分= x.Count(y => y.Attendance == AttendanceType.事假) / 20 * -1,
@@ -133,14 +133,14 @@ namespace prjAttendance.Controllers
                 曠課扣分= x.Count(y => y.Attendance == AttendanceType.曠課) / 2 * -1,
                 遲到次數 = x.Count(y => y.Attendance == AttendanceType.遲到),
                 遲到扣分= x.Count(y => y.Attendance == AttendanceType.遲到) / 3 * -1,
-                Guardian = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Guardian).FirstOrDefault(),
-                PhoneNunber= x.Where(y => y.StudentId == x.Key).Select(y => y.Student.PhoneNumber).FirstOrDefault(),
-                Address = x.Where(y => y.StudentId == x.Key).Select(y => y.Student.Address).FirstOrDefault()
-            }).OrderBy(x => x.Deduction).ThenBy(x => x.StudentId);
+                Guardian = x.FirstOrDefault(y => y.StudentId == x.Key).Student.Guardian,
+                PhoneNunber = x.FirstOrDefault(y => y.StudentId == x.Key).Student.PhoneNumber,
+                Address = x.FirstOrDefault(y => y.StudentId == x.Key).Student.Address
+            }).OrderBy(x => x.Deduction).ThenBy(x => x.StudentId).ToList();
             return Ok(new
             {
                 code = 1,
-                data = record.ToList()
+                data = record
             });
         }
 
@@ -150,7 +150,7 @@ namespace prjAttendance.Controllers
         {
             string Token = Request.Headers.Authorization.Parameter;
             int id = JwtAuthUtil.GetId(Token);
-            var result = db.Records.AsQueryable();
+            var result = db.Records.Where(x => x.Student.TeacherId == id).AsQueryable();
             if (viewSearch.StudentId.HasValue)
             {
                 result = result.Where(x => x.StudentId == viewSearch.StudentId);
@@ -165,21 +165,22 @@ namespace prjAttendance.Controllers
             {
                 result = result.Where(x => x.Attendance == viewSearch.Attendance);
             }
+            var teacher = db.Teachers.AsQueryable();
+            var data = result.Select(x => new
+            {
+                Id = x.Id,
+                Name = x.Student.Name,
+                Date = x.LessonDate,
+                LessonOrder = x.LessonOrder,
+                Subject = x.Subject,
+                RollCallTeacherId = teacher.FirstOrDefault(y => y.Id == x.RollCallTeacherId).Name,
+                Attendance = x.Attendance.ToString()
+            }).OrderBy(x => x.Date).ToList();
             return Ok(new
             {
                 code = 1,
-                data = result.Where(x => x.Student.TeacherId == id).Select(x => new
-                {
-                    Id = x.Id,
-                    Name = x.Student.Name,
-                    Date = x.LessonDate,
-                    LessonOrder = x.LessonOrder,
-                    Subject=x.Subject,
-                    RollCallTeacherId=db.Teachers.Where(y=>y.Id==x.RollCallTeacherId).Select(y=>y.Name).FirstOrDefault(),
-                    Attendance = x.Attendance.ToString()
-                }).OrderBy(x => x.Date).ToList()
+                data = data
             });
         }
-
     }
 }

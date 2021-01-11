@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace prjAttendance.Models
 {
@@ -17,7 +18,9 @@ namespace prjAttendance.Models
         public string Email { set; get; }
         public DateTime BirthDate { set; get; }
         public string Permission { set; get; }
+        
         public virtual ICollection<Timetable> Timetables { set; get; }
+
         public virtual ICollection<Contactrecord> Contactrecords { set; get; }
     }
 }
